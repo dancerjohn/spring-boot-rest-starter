@@ -35,6 +35,8 @@ target/
 
 .idea
 *.iml
+tomcat
+logs
 
 #################
 ## Visual Studio

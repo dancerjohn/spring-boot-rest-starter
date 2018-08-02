@@ -1,0 +1,43 @@
+server:
+  error.whitelabel.enabled: false
+  port: 8443
+
+  tomcat:
+    basedir: ./tomcat
+    accesslog:
+      enabled: true
+      directory: ../logs/access
+      prefix: access
+      suffix: .log
+      rename-on-rotate: false
+      pattern: "common"
+
+
+spring:
+  jackson:
+    deserialize.fail_on_unknown_properties: true
+    deserialize.fail_on_null_for_properties: true
+    deserialize.fail_on_reading_dup_tree_key: true
+
+    default-property-inclusion: non_null
+    serialization.fail_on_empty_beans: false
+    serialization.write_null_map_values: false
+    serialization.WRITE_DATES_AS_TIMESTAMPS: false
+
+  main:
+    banner-mode: "off"
+
+# below provides access to metrics
+management.security.enabled: false
+
+---
+spring:
+  profiles: development
+
+---
+spring:
+  profiles: integration
+
+---
+spring:
+  profiles: production
