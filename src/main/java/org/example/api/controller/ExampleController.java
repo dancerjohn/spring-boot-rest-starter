@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.example.api.model.response.SomeResponse;
+import org.libex.additions.rest.role.PermissionsAllowed;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
@@ -81,6 +82,23 @@ public class ExampleController {
 	}
 
 	@Timed
+	@PermissionsAllowed({"DeleteRecord"})
+	@RequestMapping(value = "/permission1",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_UTF8_VALUE
+	)
+	@ApiOperation(value = "Get something")
+	@ApiResponses(value = {
+			@ApiResponse(code = 401, message = "Unauthorized"),
+			@ApiResponse(code = 403, message = "Forbidden")
+	})
+	SomeResponse permission1() {
+		return new SomeResponse()
+				.setTitle("Some title")
+				.setDescription("Some description");
+	}
+
+	@Timed
 	@RolesAllowed("Admin") // note that we don't need "Role_" here because it is automatically added
 	@RequestMapping(value = "/adminRole",
 			method = RequestMethod.GET,
@@ -91,7 +109,7 @@ public class ExampleController {
 			@ApiResponse(code = 401, message = "Unauthorized"),
 			@ApiResponse(code = 403, message = "Forbidden")
 	})
-	SomeResponse someAdmi32() {
+	SomeResponse someAdmin3() {
 		return new SomeResponse()
 				.setTitle("Some title")
 				.setDescription("Some description");

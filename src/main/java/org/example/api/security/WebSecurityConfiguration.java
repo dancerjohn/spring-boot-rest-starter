@@ -6,7 +6,7 @@ import org.example.model.user.User;
 import org.example.service.MyUserDetailsService;
 import org.libex.additions.rest.role.spring.RolePermissionFilter;
 import org.libex.additions.rest.role.spring.SpringRoleUtils;
-import org.libex.additions.rest.role.spring.SpringRoleUtils.PermissionConverter;
+import org.libex.additions.rest.role.spring.SpringRoleUtils.RolePermissionConverter;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
-import static org.example.api.security.MethodSecurityConfiguration.*;
 
 @Configuration
 @EnableWebSecurity
@@ -49,14 +48,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public RolePermissionFilter rolePermissionFilter() {
+		// Adds roles and permissions to security context
 		return new RolePermissionFilter<>(
 				(k, v) -> SpringRoleUtils.getUserDetailsOf(User.class),
-				user -> SpringRoleUtils.getRolesAndPermissionsAsGrantedAuthorities(user,
-						PermissionConverter.<Permission, Role>builder()
-								.permissionToStringFunction(Permission::name)
-								.prefix("")
-								.prefix(PERMISSION_PREFIX)
-								.build()));
+				RolePermissionConverter.<Permission, Role>builder()
+						.includeRawValues(true)
+						.permissionToStringFunction(Permission::name)
+						.build());
 	}
 
 	@Bean
