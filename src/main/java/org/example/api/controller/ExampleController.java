@@ -1,5 +1,7 @@
 package org.example.api.controller;
 
+import javax.annotation.security.RolesAllowed;
+
 import com.codahale.metrics.annotation.Timed;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -8,6 +10,7 @@ import io.swagger.annotations.ApiResponses;
 import org.example.api.model.response.SomeResponse;
 
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +41,57 @@ public class ExampleController {
 			@ApiResponse(code = 403, message = "Forbidden")
 	})
 	SomeResponse something(){
+		return new SomeResponse()
+				.setTitle("Some title")
+				.setDescription("Some description");
+	}
+
+	@Timed
+	// Protected via WebSecurityConfiguration
+	@RequestMapping(value = "/someAdmin",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_UTF8_VALUE
+	)
+	@ApiOperation(value = "Get something")
+	@ApiResponses(value = {
+			@ApiResponse(code = 401, message = "Unauthorized"),
+			@ApiResponse(code = 403, message = "Forbidden")
+	})
+	SomeResponse someAdmin() {
+		return new SomeResponse()
+				.setTitle("Some title")
+				.setDescription("Some description");
+	}
+
+	@Timed
+	@Secured({"PERMISSION_DeleteRecord"})
+	@RequestMapping(value = "/someAdmin2",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_UTF8_VALUE
+	)
+	@ApiOperation(value = "Get something")
+	@ApiResponses(value = {
+			@ApiResponse(code = 401, message = "Unauthorized"),
+			@ApiResponse(code = 403, message = "Forbidden")
+	})
+	SomeResponse someAdmin2() {
+		return new SomeResponse()
+				.setTitle("Some title")
+				.setDescription("Some description");
+	}
+
+	@Timed
+	@RolesAllowed("Admin") // note that we don't need "Role_" here because it is automatically added
+	@RequestMapping(value = "/adminRole",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_UTF8_VALUE
+	)
+	@ApiOperation(value = "Get something")
+	@ApiResponses(value = {
+			@ApiResponse(code = 401, message = "Unauthorized"),
+			@ApiResponse(code = 403, message = "Forbidden")
+	})
+	SomeResponse someAdmi32() {
 		return new SomeResponse()
 				.setTitle("Some title")
 				.setDescription("Some description");

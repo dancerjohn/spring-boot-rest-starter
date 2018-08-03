@@ -33,6 +33,10 @@ public class Application extends WebMvcConfigurerAdapter {
 		registry.addInterceptor(new LoggingInterceptor());
 	}
 
+//	public void addViewControllers(ViewControllerRegistry registry) {
+//		registry.addViewController("/login").setViewName("login");
+//	}
+
 	@Bean
 	public Docket getApi(){
 		ApiInfo info = new ApiInfoBuilder()
