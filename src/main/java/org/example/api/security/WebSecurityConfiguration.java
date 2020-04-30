@@ -31,7 +31,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 						"/configuration/**",
 						"/swagger-ui.html", "/webjars/**")
 				.permitAll()
-				.antMatchers("/")
+				.antMatchers("/", "/book/**")
 				.permitAll()
 				.antMatchers("/something")
 				.hasAuthority(Permission.ReadRecord.name())

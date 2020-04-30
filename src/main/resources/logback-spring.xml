@@ -35,6 +35,6 @@
 
   <logger level="ERROR" name="org.apache"/>
   <logger level="WARN" name="org.springframework"/>
-  <logger level="DEBUG" name="org.springframework.security"/>
+  <logger level="WARN" name="org.springframework.security"/>
   <logger level="ERROR" name="org.hibernate"/>
 </configuration>
